@@ -4,8 +4,8 @@ const Domain = mongoose.model('Domain');
 
 exports.createDomain = async (req, res) => {
 	try {
-		console.log(req.body)
-    const domain = await (new Domain(req.query)).save();
+		console.log(req.user, 'from here')
+    const domain = await (new Domain({ ...req.query, owner: req.user._id })).save();
     res.json({ domain });
   } catch (error) {
     res.status(500).json({ error: error.toString() });
@@ -15,7 +15,7 @@ exports.createDomain = async (req, res) => {
 
 exports.getDomains = async (req, res) => {
 	try {
-		const domains = await Domain.find()
+		const domains = await Domain.find({ owner: req.user })
 		res.json( { domains} )
 	} catch (error) {
 		res.status(500).json( { error: error.toString() });
@@ -38,6 +38,6 @@ exports.deleteDomain = async (req, res) => {
 		const domain = await Domain.findOneAndDelete({ _id: req.params.id })
 		res.json( { message: "Domain deleted"})
 	} catch (error) {
-		res.status(500).json({ error: error.toStringa() });
+		res.status(500).json({ error: error.toString() });
 	}
 }

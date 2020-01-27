@@ -10,6 +10,11 @@ const domainSchema = new Schema({
 	description: {
 		type: String,
 		required: 'Please supply a description'
+	},
+	owner: {
+		type: mongoose.Schema.Types.ObjectId,
+		required: 'Please create a domain assosciated with a user',
+		ref: 'User'
 	}
 })
 
